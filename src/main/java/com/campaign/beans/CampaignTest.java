@@ -6,11 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "CampaignTest")
 @Data
-public class CampaignTest {
+public class CampaignTest implements DefaultValues{
         @Id
         @GeneratedValue(strategy= GenerationType.IDENTITY)
         @Column(name = "campaignId")
@@ -30,6 +31,21 @@ public class CampaignTest {
         private int includeBusinessCustomers;
         private String campaignCalls;
         private String campaignEmail;
+        private Date createdDateTime;
+        private Date lastUpdatedDateTime;
+
+        @Override
+        public void createDefaultValues() {
+                Date now = new Date();
+                setCreatedDateTime(now);
+                setLastUpdatedDateTime(now);
+        }
+
+        @Override
+        public void updateDefaultValues() {
+                Date now = new Date();
+                setLastUpdatedDateTime(now);
+        }
 
 //        public CampaignTest(int campaignId, String campaignName, int targetGroupId, String description, int status, String language, int campaignCategoryId, int numberOfCustomers, String createdBy, String createdByUser, String lastUpdatedBy, String lastUpdatedByUser, int dealerId, int includeBusinessCustomers, String campaignCalls, String campaignEmail) {
 //                this.campaignId = campaignId;
@@ -181,5 +197,20 @@ public class CampaignTest {
 //        public void setCampaignEmail(String campaignEmail) {
 //                this.campaignEmail = campaignEmail;
 //        }
-
+//
+//        public Date getCreatedDateTime() {
+//                return createdDateTime;
+//        }
+//
+//        public void setCreatedDateTime(Date createdDateTime) {
+//                this.createdDateTime = createdDateTime;
+//        }
+//
+//        public Date getLastUpdatedDateTime() {
+//                return lastUpdatedDateTime;
+//        }
+//
+//        public void setLastUpdatedDateTime(Date lastUpdatedDateTime) {
+//                this.lastUpdatedDateTime = lastUpdatedDateTime;
+//        }
 }

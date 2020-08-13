@@ -28,6 +28,7 @@ public class CampaignController {
 
     @PostMapping("/create")
     public CampaignTest saveCampaign(@RequestBody CampaignTest campaign) {
+        campaign.createDefaultValues();
         return campaignRepository.save(campaign);
     }
 
@@ -39,6 +40,7 @@ public class CampaignController {
         record.setDescription(campaignTest.getDescription());
         record.setCampaignEmail(campaignTest.getCampaignEmail());
         record.setTargetGroupId(campaignTest.getTargetGroupId());
+        record.updateDefaultValues();
         return campaignRepository.save(record);
     }
 
