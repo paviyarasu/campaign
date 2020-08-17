@@ -1,6 +1,7 @@
 package com.campaign.api;
 
 import com.campaign.beans.CampaignException;
+import com.campaign.beans.CampaignService;
 import com.campaign.beans.CampaignTest;
 import com.campaign.repo.CampaignRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,41 +14,38 @@ import java.util.List;
 public class CampaignController {
 
     @Autowired
-    private CampaignRepository campaignRepository;
+    private CampaignService campaignService;
 
     @GetMapping()
     public List<CampaignTest> getAllCampaign() {
-        return campaignRepository.findAll();
+        return campaignService.findAllCampaign();
     }
 
     @GetMapping("/{id}")
     public CampaignTest getCampaignByID(@PathVariable String id) {
         int campaignId = Integer.parseInt(id);
-        return campaignRepository.findById(campaignId).orElseThrow(() -> new CampaignException(campaignId));
+        return campaignService.findCampaignByID(campaignId);
+    }
+
+    @GetMapping("/get/{name}")
+    public CampaignTest getCampaignByName(@PathVariable String name){
+        return campaignService.findByCampaignName(name);
     }
 
     @PostMapping("/create")
     public CampaignTest saveCampaign(@RequestBody CampaignTest campaign) {
-        campaign.createDefaultValues();
-        return campaignRepository.save(campaign);
+        return campaignService.saveCampaign(campaign);
     }
 
-    @PutMapping("/update/{id}")
-    public CampaignTest updateCampaign(@PathVariable String id, @RequestBody CampaignTest campaignTest) {
-        CampaignTest record = getCampaignByID(id);
-        record.setCampaignName(campaignTest.getCampaignName());
-        record.setCampaignCalls(campaignTest.getCampaignCalls());
-        record.setDescription(campaignTest.getDescription());
-        record.setCampaignEmail(campaignTest.getCampaignEmail());
-        record.setTargetGroupId(campaignTest.getTargetGroupId());
-        record.updateDefaultValues();
-        return campaignRepository.save(record);
+    @PutMapping("/update")
+    public CampaignTest updateCampaign(@RequestBody CampaignTest campaignTest) {
+        return campaignService.updateCampaign(campaignTest);
     }
 
     @DeleteMapping("/delete/{id}")
     public String deleteCampaign(@PathVariable String id){
         int campaignId = Integer.parseInt(id);
-        campaignRepository.deleteById(campaignId);
+        campaignService.deleteCampaign(campaignId);
         return "Campaign Deleted Successfully";
     }
 }
